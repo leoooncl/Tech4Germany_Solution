@@ -12,10 +12,11 @@ const GOVDATA_KEY = String.fromEnvironment(
 //in system variables: --dart-define=GOVDATE_KEY=
 
 // Functions
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MaterialApp(
+      home: HomeScreen(), //we could imagine more sides/ screens
+    ));
 
+//API request
 void APIfunction() {
 //send API request to OpenGov
   var prompt; //created because otherwise problem
@@ -38,73 +39,158 @@ void APIfunction() {
   );
 }
 
-class MyApp extends StatelessWidget {
-  //everything in Flutter is organized in widgets
-  const MyApp({Key? key}) : super(key: key);
-  //MyApp is the name, StatelessWidget is one widget you can choose from
-  @override //always need to override and then return what you want to show at the widget
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      //Widget from Flutter
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false, //debug pannel gets away
+//Classes
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
-      theme: ThemeData(
-          //basic colors, themes,
-
-          primaryColor: Colors.white,
-          primarySwatch: Colors.pink, //updates every color of the app
-          scaffoldBackgroundColor: Colors.grey.shade800),
-      home: const MyHomePage(
-          title: 'How to make the governmant transparent - fast'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  //another widget (internal state, that is kept, internal date that can be kept)
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
+  @override //redefining the build function of Stateless Widget
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true, // Titel wird zentriert
-        textTheme: Theme.of(context).textTheme.apply(
-              //
-              bodyColor: Colors.black,
-              displayColor: Colors.black,
-            ),
+        title: const Text(
+          'How to make the government transparent - fast',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 30,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
       ),
-      body: Placeholder(),
+      body: Column(
+        // Zeilen in denen die verschiedenen Elemente aufgelistet sind
+        children: [
+          /*1* Sorting*/
+          sortingSection,
+          /*2* List*/
+          sortingSection,
+          const MyCheckboxDataset(),
+          const MyCheckboxAlphabet(),
+        ],
+      ),
+      floatingActionButton: const FloatingActionButton(
+        onPressed: null,
+        child: Text('cick'),
+      ),
     );
   }
 }
 
-class Sorting_ extends StatefulWidget {
-  const Sorting_({Key? key}) : super(key: key);
+// Widget for the selection of Dataset and Alphabet
+Widget sortingSection = Container(
+  padding: const EdgeInsets.all(32),
+  decoration: BoxDecoration(color: Colors.green),
+  child: Column(
+    crossAxisAlignment:
+        CrossAxisAlignment.start, //don't know some kind of align
+    children: [
+      const Text(
+        'Please sort by:',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+        ),
+      ),
+      Container(
+        color: Colors.blue,
+        child: Row(
+          children: const [
+            //MyCheckboxAlphabet(),
+            //MyCheckboxDataset(),
+          ],
+        ),
+      )
+    ],
+  ),
+);
+
+// Widget for CheckboxListTile
+class LabeledCheckbox extends StatelessWidget {
+  const LabeledCheckbox({
+    Key? key,
+    required this.label,
+    required this.padding,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
+
+  final String label;
+  final EdgeInsets padding;
+  final bool value;
+  final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        Text("Hallo Welt"),
-        Text("Hallo neue Welt"),
-      ],
+    return InkWell(
+      onTap: () {
+        onChanged(!value);
+      },
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: <Widget>[
+            Expanded(child: Text(label)),
+            Checkbox(
+              value: value,
+              onChanged: (bool? newValue) {
+                onChanged(newValue!);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
+}
+
+// Checkbox for Dataset
+class MyCheckboxDataset extends StatefulWidget {
+  const MyCheckboxDataset({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
+  State<MyCheckboxDataset> createState() => _MyCheckboxDatasetState();
+}
+
+class _MyCheckboxDatasetState extends State<MyCheckboxDataset> {
+  bool _isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return LabeledCheckbox(
+      label: 'Datasets',
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      value: _isSelected,
+      onChanged: (bool newValue) {
+        setState(() {
+          _isSelected = newValue;
+        });
+      },
+    );
+  }
+}
+
+// Checkbox for Alphabet
+class MyCheckboxAlphabet extends StatefulWidget {
+  const MyCheckboxAlphabet({Key? key}) : super(key: key);
+
+  @override
+  State<MyCheckboxAlphabet> createState() => _MyCheckboxAlphabetState();
+}
+
+class _MyCheckboxAlphabetState extends State<MyCheckboxAlphabet> {
+  bool _isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return LabeledCheckbox(
+      label: 'Alphabet',
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      value: _isSelected,
+      onChanged: (bool newValue) {
+        setState(() {
+          _isSelected = newValue;
+        });
+      },
+    );
   }
 }
