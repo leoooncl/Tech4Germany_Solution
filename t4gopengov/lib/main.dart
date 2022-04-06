@@ -1,5 +1,11 @@
-import 'package:flutter/material.dart';
+import 'dart:html';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart'; //imports http protocol
+
+const GOVDATA_KEY = String.fromEnvironment(
+    "GOVDATA_KEY"); //could be stored locally as system variable in launch.json
+//in system variables: --dart-define=GOVDATE_KEY=
 void main() {
   runApp(const MyApp());
 }
@@ -7,7 +13,7 @@ void main() {
 //void APIfunction(){
 
 //send API request to OpenGov
-
+// http.post(Url);
 //}
 
 class MyApp extends StatelessWidget {
