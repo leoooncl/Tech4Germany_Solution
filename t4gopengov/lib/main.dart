@@ -4,96 +4,19 @@ import 'dart:html';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' as rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:t4gopengov/GovData.dart'; //imports http protocol
-
-// Global Constants //
-const GOVDATA_KEY = String.fromEnvironment(
-    "GOVDATA_KEY"); //could be stored locally as system variable in launch.json
-//in system variables: --dart-define=GOVDATE_KEY=
 
 // Functions
 void main() => runApp(const MaterialApp(
       home: HomeScreen(), //we could imagine more sides/ screen
     ));
 
-//API request
-void APIfunction() {
-//send API request to OpenGov
-  var prompt; //created because otherwise problem
-  http.post(
-    //http in improt is the variable //YT Video 42:52
-    Uri.parse("https://"),
-    headers: {
-      "Authorization":
-          "Bearer GOVDATA_KEY", //here needs to go the variable from the launch.json file
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    body: jsonEncode({
-      "prompt": prompt,
-      "max_tokens": 100,
-      "temperature": 0,
-      "top_p": 1,
-      "stop": "\n",
-    }),
-    //return json
-  );
-}
-
 //Classes
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key})
       : super(key: key); //"const in front of HomeScreen"
-
-//https function
-/*
-  List<GovData> _govdatas = <GovData>[];
-
-  Future<List<GovData>> fetchGovData() async {
-    var hello =
-        'https://github.com/tech4germany/coding-challenge/blob/main/backend-response.json';
-    var response = await http.get(hello);
-
-    var govdatas = <GovData>[];
-
-    if (response.statusCode == 200) {
-      var govdatasJson = json.decode(response.body);
-      for (var govdataJson in govdatasJson) {
-        govdatas.add(GovData.fromJson(govdataJson));
-      }
-    }
-    return govdatas;
-  }
-*/
-
-//   Future<String> loadNoteAsset() async {
-//   return await rootBundle.loadString('assets/data.json');
-// }
-
-// Future <List<Post>> parsePost() async {
-//   var posts = List<Post>();
-//     String source = await loadNoteAsset();
-//   final parsed = jsonDecode(source);
-//   for (var item in parsed) {
-//     posts.add(Post.fromJson(item));
-//   }
-//   return posts;
-// }
-
-/*
-  @override
-  void initState() {
-    fetchGovData().then((value) {
-      setState(() {
-        _govdatas.addAll(value);
-      });
-    });
-    super.initState();
-    }
-  }
-
-*/
 
   @override //redefining the build function of Stateless Widget
   Widget build(BuildContext context) {
@@ -118,8 +41,73 @@ class HomeScreen extends StatelessWidget {
           MyCheckboxAlphabet(),
           /*2* List*/
           Expanded(
-              child:
-                  listSection), //When use a Scrollable Widget inside a Column, expand it
+              //When use a Scrollable Widget inside a Column, expand it
+              child: FutureBuilder(
+                  future: ReadJsonData(),
+                  builder: (context, data) {
+                    if (data.hasError) {
+                      return Center(child: Text("${data.error}"));
+                    } else if (data.hasData) {
+                      var items = data.data as List<GovData>;
+                      return ListView.builder(
+                          itemCount: items == null ? 0 : items.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              elevation: 5,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                    ),
+                                    Expanded(
+                                        child: Container(
+                                      padding: EdgeInsets.only(bottom: 8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 8, right: 8),
+                                            child: Text(
+                                              items[index]
+                                                  .department
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 8, right: 8),
+                                            child: Text(items[index]
+                                                .datasets
+                                                .toString()),
+                                          )
+                                        ],
+                                      ),
+                                    ))
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  })),
           Container(
             child: const Text('This is the bottom'),
             color: Colors.green,
@@ -132,9 +120,81 @@ class HomeScreen extends StatelessWidget {
       //),
     );
   }
+
+  Future<List<GovData>> ReadJsonData() async {
+    final jsondata = await rootBundle.rootBundle
+        .loadString('lib/assets/backend-response.json');
+    final list = json.decode(jsondata) as List<dynamic>;
+
+    return list
+        .map((e) => GovData.fromJson(e))
+        .toList(); //reads Data from Json and sends it to a map
+  }
 }
 
-// Widget for the List sectioin
+//Widget for the YouTubeList Video
+/*
+Widget YouTubeList = FutureBuilder(
+    future: ReadJsonData(),
+    builder: (context, data) {
+      if (data.hasError) {
+        return Center(child: Text("${data.error}"));
+      } else if (data.hasData) {
+        var items = data.data as List<GovData>;
+        return ListView.builder(
+            itemCount: items == null ? 0 : items.length,
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 5,
+                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                      ),
+                      Expanded(
+                          child: Container(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 8, right: 8),
+                              child: Text(
+                                items[index].department.toString(),
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 8, right: 8),
+                              child: Text(items[index].datasets.toString()),
+                            )
+                          ],
+                        ),
+                      ))
+                    ],
+                  ),
+                ),
+              );
+            });
+      } else {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    
+
+    });
+*/
+
+// Old Widget for the List section
 Widget listSection = Container(
     color: Colors.blue,
     child: ListView.builder(
@@ -154,7 +214,7 @@ Widget listSection = Container(
       itemCount: 50,
     ));
 
-// Widget for the selection of Dataset and Alphabet
+// Widget and Textfield for the selection of Dataset and Alphabet
 Widget sortingSection = Container(
   padding: const EdgeInsets.all(32),
   decoration: BoxDecoration(color: Colors.green),
@@ -182,7 +242,7 @@ Widget sortingSection = Container(
   ),
 );
 
-// Widget for CheckboxListTile
+// Checkbox Widged labeled
 class LabeledCheckbox extends StatelessWidget {
   const LabeledCheckbox({
     Key? key,
