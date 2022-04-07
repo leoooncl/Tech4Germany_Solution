@@ -15,7 +15,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isDescending = false;
+  bool isDescending = true;
+  bool alphabetically = false;
 
   @override //redefining the build function of Stateless Widget
   Widget build(BuildContext context) {
@@ -40,8 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
           sortingSection,
-          const MyCheckbox(label: 'Datasets'),
-          const MyCheckbox(label: 'asdf'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Number of datasets'),
+              buildSwitch(),
+              Text('Alphabetically'),
+            ],
+          ),
           TextButton.icon(
             icon: RotatedBox(
               quarterTurns: 1,
@@ -66,13 +74,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       return ListView.builder(
                           itemCount: items == null ? 0 : items.length,
                           itemBuilder: (context, index) {
-                            final sortedItems = items
-                              ..sort((item1, item2) => isDescending
-                                  ? item2.department
-                                      .toUpperCase()
-                                      .compareTo(item1.department.toUpperCase())
-                                  : item1.department.toUpperCase().compareTo(
-                                      item2.department.toUpperCase()));
+                            var sortedItems = items;
+                            if (!alphabetically) {
+                              sortedItems = items
+                                ..sort((item1, item2) => isDescending
+                                    ? item2.datasets.compareTo(item1.datasets)
+                                    : item1.datasets.compareTo(item2.datasets));
+                            } else {
+                              sortedItems = items
+                                ..sort((item1, item2) => isDescending
+                                    ? item2.department.toUpperCase().compareTo(
+                                        item1.department.toUpperCase())
+                                    : item1.department.toUpperCase().compareTo(
+                                        item2.department.toUpperCase()));
+                            }
+
                             final item = sortedItems[index];
 
                             return Card(
@@ -140,6 +156,19 @@ class _HomeScreenState extends State<HomeScreen> {
       //),
     );
   }
+
+  Widget buildSwitch() => Transform.scale(
+        scale: 1.4,
+        child: Switch.adaptive(
+          // activeColor: Colors.blue,
+          //activeTrackColor: Colors.blue.withOpacity(0.4),
+          inactiveThumbColor: Colors.orange,
+          inactiveTrackColor: Colors.orange.withOpacity(0.4),
+          value: alphabetically,
+          onChanged: (byDataset) =>
+              setState(() => this.alphabetically = !alphabetically),
+        ),
+      );
 
   // Widget and Textfield for the selection of Dataset and Alphabet
   Widget sortingSection = Container(
