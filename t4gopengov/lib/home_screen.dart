@@ -1,3 +1,4 @@
+//Import Stuff
 import 'dart:convert'; // to convert Json file
 import 'dart:html';
 import 'dart:ui';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:t4gopengov/GovData.dart'; //imports http protocol
-import 'mycheckbox.dart';
 
 //Classes
 class HomeScreen extends StatefulWidget {
@@ -33,14 +33,32 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
       ),
       body: Column(
-        // Zeilen in denen die verschiedenen Elemente aufgelistet sind
         children: [
-          /*1* Sorting*/
+          /*Description*/
           Container(
-            child: const Text('description'),
+            child: const Text(
+              'Due to the Open Data paragraph, every ministry is obliged to provide data. Find here a simple tool to see which ministry has already done how much! Data is provided by a template but will be updatet in the future by an API.',
+              style: TextStyle(fontSize: 15),
+            ),
             color: Colors.white,
+            padding: EdgeInsets.all(15),
           ),
-          sortingSection,
+          const Divider(
+            height: 1.0,
+            thickness: 2.0,
+            endIndent: 30.0,
+            indent: 30.0,
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: const Text(
+              'Sort By:',
+              style: TextStyle(fontSize: 30),
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,6 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 16),
             ),
             onPressed: () => setState(() => isDescending = !isDescending),
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+          const Divider(
+            height: 1.0,
+            thickness: 2.0,
+            endIndent: 30.0,
+            indent: 30.0,
           ),
           /*2* List*/
           Expanded(
@@ -144,16 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
                   })),
-          Container(
-            child: const Text('This is the bottom'),
-            color: Colors.green,
-          )
         ],
       ),
-      //floatingActionButton: const FloatingActionButton(
-      //onPressed: null,
-      //child: Text('cick'),
-      //),
     );
   }
 
@@ -170,34 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 
-  // Widget and Textfield for the selection of Dataset and Alphabet
-  Widget sortingSection = Container(
-    padding: const EdgeInsets.all(32),
-    decoration: BoxDecoration(color: Colors.green),
-    child: Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start, //don't know some kind of align
-      children: [
-        const Text(
-          'Please sort by:',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-          ),
-        ),
-        Container(
-          color: Colors.blue,
-          child: Row(
-            children: const [
-              //MyCheckbox(label: 'Datasets'),
-              //MyCheckbox(label: 'asdf'),
-            ],
-          ),
-        )
-      ],
-    ),
-  );
-
   Future<List<GovData>> readJsonData() async {
     final jsondata = await rootBundle.rootBundle
         .loadString('lib/assets/backend-response.json');
@@ -208,7 +199,3 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList(); //reads Data from Json and sends it to a map
   }
 }
-
-  // HomeScreen({Key? key}) : super(key: key); //"const in front of HomeScreen
-
-  
