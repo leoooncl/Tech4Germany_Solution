@@ -1,5 +1,5 @@
 // Import Stuf //
-import 'dart:convert';
+import 'dart:convert'; // to convert Json file
 import 'dart:html';
 import 'dart:ui';
 
@@ -13,7 +13,7 @@ const GOVDATA_KEY = String.fromEnvironment(
 
 // Functions
 void main() => runApp(const MaterialApp(
-      home: HomeScreen(), //we could imagine more sides/ screens
+      home: HomeScreen(), //we could imagine more sides/ screen
     ));
 
 //API request
@@ -63,13 +63,13 @@ class HomeScreen extends StatelessWidget {
         children: [
           /*1* Sorting*/
           sortingSection,
-          MyCheckboxDataset(),
+          MyCheckboxDataset(), //wahrscheinlich unterstrichen, da Klassen und Widgets gemischt werden
           MyCheckboxAlphabet(),
           /*2* List*/
           Container(
               child: ListView(
-            padding: const EdgeInsets.all(8),
-            shrinkWrap: true,
+            padding: const EdgeInsets.all(8), //Elementen Rahmen geben
+            shrinkWrap: true, //weiß nicht genau was das ist
             children: [
               Container(
                 color: Colors.blue,
@@ -90,6 +90,13 @@ class HomeScreen extends StatelessWidget {
               Container(
                 child: Text('This is the bottom'),
               )
+              // ListView.builder(
+              //   itemBuilder: (context, index) {
+              //     return Card(
+              //       child: Column(children: []),
+              //     )
+              //   },
+              // )
             ],
           ))
         ],
