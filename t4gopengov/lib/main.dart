@@ -66,39 +66,13 @@ class HomeScreen extends StatelessWidget {
           MyCheckboxDataset(), //wahrscheinlich unterstrichen, da Klassen und Widgets gemischt werden
           MyCheckboxAlphabet(),
           /*2* List*/
+          Expanded(
+              child:
+                  listSection), //When use a Scrollable Widget inside a Column, expand it
           Container(
-              child: ListView(
-            padding: const EdgeInsets.all(8), //Elementen Rahmen geben
-            shrinkWrap: true, //weiß nicht genau was das ist
-            children: [
-              Container(
-                color: Colors.blue,
-                height: 150,
-              ),
-              Container(
-                color: Colors.black,
-                height: 150,
-              ),
-              Container(
-                color: Colors.blue,
-                height: 150,
-              ),
-              Container(
-                color: Colors.black,
-                height: 150,
-              ),
-              Container(
-                child: Text('This is the bottom'),
-              )
-              // ListView.builder(
-              //   itemBuilder: (context, index) {
-              //     return Card(
-              //       child: Column(children: []),
-              //     )
-              //   },
-              // )
-            ],
-          ))
+            child: const Text('This is the bottom'),
+            color: Colors.green,
+          )
         ],
       ),
       //floatingActionButton: const FloatingActionButton(
@@ -108,6 +82,26 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+// Widget for the List sectioin
+Widget listSection = Container(
+    color: Colors.blue,
+    child: ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      // physics: NeverScrollableScrollPhysics(),
+      // addAutomaticKeepAlives: false,
+      // cacheExtent: 100,
+      itemBuilder: (context, index) {
+        return Card(
+          child: Column(children: const <Widget>[
+            Text('Department'),
+            Text('Amount of Datasets'),
+          ]),
+        );
+      },
+      itemCount: 50,
+    ));
 
 // Widget for the selection of Dataset and Alphabet
 Widget sortingSection = Container(
