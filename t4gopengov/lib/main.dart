@@ -4,7 +4,8 @@ import 'dart:html';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; //imports http protocol
+import 'package:http/http.dart' as http;
+import 'package:t4gopengov/GovData.dart'; //imports http protocol
 
 // Global Constants //
 const GOVDATA_KEY = String.fromEnvironment(
@@ -42,7 +43,57 @@ void APIfunction() {
 
 //Classes
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key})
+      : super(key: key); //"const in front of HomeScreen"
+
+//https function
+/*
+  List<GovData> _govdatas = <GovData>[];
+
+  Future<List<GovData>> fetchGovData() async {
+    var hello =
+        'https://github.com/tech4germany/coding-challenge/blob/main/backend-response.json';
+    var response = await http.get(hello);
+
+    var govdatas = <GovData>[];
+
+    if (response.statusCode == 200) {
+      var govdatasJson = json.decode(response.body);
+      for (var govdataJson in govdatasJson) {
+        govdatas.add(GovData.fromJson(govdataJson));
+      }
+    }
+    return govdatas;
+  }
+*/
+
+//   Future<String> loadNoteAsset() async {
+//   return await rootBundle.loadString('assets/data.json');
+// }
+
+// Future <List<Post>> parsePost() async {
+//   var posts = List<Post>();
+//     String source = await loadNoteAsset();
+//   final parsed = jsonDecode(source);
+//   for (var item in parsed) {
+//     posts.add(Post.fromJson(item));
+//   }
+//   return posts;
+// }
+
+/*
+  @override
+  void initState() {
+    fetchGovData().then((value) {
+      setState(() {
+        _govdatas.addAll(value);
+      });
+    });
+    super.initState();
+    }
+  }
+
+*/
 
   @override //redefining the build function of Stateless Widget
   Widget build(BuildContext context) {
@@ -95,8 +146,8 @@ Widget listSection = Container(
       itemBuilder: (context, index) {
         return Card(
           child: Column(children: const <Widget>[
-            Text('Department'),
-            Text('Amount of Datasets'),
+            Text('_notes[index].department'),
+            Text('_notes[index].datasets'),
           ]),
         );
       },
