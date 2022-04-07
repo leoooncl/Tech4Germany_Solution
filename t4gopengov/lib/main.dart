@@ -16,7 +16,7 @@ void main() => runApp(const MaterialApp(
 //Classes
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key})
-      : super(key: key); //"const in front of HomeScreen"
+      : super(key: key); //"const in front of HomeScreen
 
   @override //redefining the build function of Stateless Widget
   Widget build(BuildContext context) {
@@ -39,6 +39,17 @@ class HomeScreen extends StatelessWidget {
           sortingSection,
           MyCheckboxDataset(), //wahrscheinlich unterstrichen, da Klassen und Widgets gemischt werden
           MyCheckboxAlphabet(),
+          // TextButton.icon(
+          //   icon: RotatedBox(
+          //     quarterTurns: 1,
+          //     child: Icon(Icons.compare_arrows, size: 28),
+          //   ),
+          //   label: Text(
+          //     isDescending ? 'Descending': 'Ascending',
+          //     style: TextStyle(fontSize: 16),
+          //   ),
+          //   onPressed: () => setState(() => isDescending =!isDescending),
+          // ),
           /*2* List*/
           Expanded(
               //When use a Scrollable Widget inside a Column, expand it
