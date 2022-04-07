@@ -12,7 +12,7 @@ const GOVDATA_KEY = String.fromEnvironment(
 //in system variables: --dart-define=GOVDATE_KEY=
 
 // Functions
-void main() => runApp(MaterialApp(
+void main() => runApp(const MaterialApp(
       home: HomeScreen(), //we could imagine more sides/ screens
     ));
 
@@ -36,6 +36,7 @@ void APIfunction() {
       "top_p": 1,
       "stop": "\n",
     }),
+    //return json
   );
 }
 
@@ -62,16 +63,41 @@ class HomeScreen extends StatelessWidget {
         children: [
           /*1* Sorting*/
           sortingSection,
+          MyCheckboxDataset(),
+          MyCheckboxAlphabet(),
           /*2* List*/
-          sortingSection,
-          const MyCheckboxDataset(),
-          const MyCheckboxAlphabet(),
+          Container(
+              child: ListView(
+            padding: const EdgeInsets.all(8),
+            shrinkWrap: true,
+            children: [
+              Container(
+                color: Colors.blue,
+                height: 150,
+              ),
+              Container(
+                color: Colors.black,
+                height: 150,
+              ),
+              Container(
+                color: Colors.blue,
+                height: 150,
+              ),
+              Container(
+                color: Colors.black,
+                height: 150,
+              ),
+              Container(
+                child: Text('This is the bottom'),
+              )
+            ],
+          ))
         ],
       ),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
-        child: Text('cick'),
-      ),
+      //floatingActionButton: const FloatingActionButton(
+      //onPressed: null,
+      //child: Text('cick'),
+      //),
     );
   }
 }
